@@ -14,6 +14,8 @@
       --yellow: #FFD90F;
       --orange: #F6A623;
       --red: #E74C3C;
+      --green: #2EA043;
+      --blue: #58A6FF;
       --dark: #0D1117;
       --darker: #010409;
       --surface: #161B22;
@@ -124,12 +126,26 @@
       font-size: 0.9rem;
     }
 
+    /* Section headers */
+    .section-header {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--orange);
+      font-size: 1.4rem;
+      margin: 48px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-header:first-of-type {
+      margin-top: 0;
+    }
+
     /* Info cards */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
-      margin: 40px 0;
+      margin: 24px 0;
     }
 
     .card {
@@ -167,13 +183,58 @@
       margin-right: 8px;
     }
 
+    /* Prose text */
+    .prose {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 16px 0;
+      line-height: 1.7;
+    }
+
+    .prose strong { color: var(--text); }
+
+    .prose a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .prose a:hover { text-decoration: underline; }
+
+    .prose code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--yellow);
+    }
+
+    /* Architecture diagram */
+    .arch-diagram {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--muted);
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .arch-diagram .highlight-text { color: var(--yellow); }
+    .arch-diagram .dim { color: var(--border); }
+
     /* Code block */
     .code-block {
       background: var(--dark);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 20px;
-      margin: 24px 0;
+      margin: 16px 0;
       overflow-x: auto;
     }
 
@@ -186,6 +247,16 @@
 
     .code-block .comment { color: var(--muted); }
     .code-block .cmd { color: var(--yellow); }
+    .code-block .string { color: var(--green); }
+    .code-block .key { color: var(--blue); }
+    .code-block .val { color: var(--orange); }
+
+    .code-label {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--orange);
+      font-size: 1rem;
+      margin: 24px 0 8px;
+    }
 
     /* Diffusion visualization */
     .diffusion-demo {
@@ -193,14 +264,11 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
-      margin: 40px 0;
+      margin: 24px 0;
     }
 
-    .diffusion-demo h3 {
-      font-family: 'Permanent Marker', cursive;
-      color: var(--orange);
-      font-size: 1.2rem;
-      margin-bottom: 16px;
+    .diffusion-demo .prose {
+      margin-bottom: 20px;
     }
 
     .step {
@@ -219,25 +287,18 @@
     .step .mask { color: var(--red); opacity: 0.5; }
     .step .revealed { color: var(--yellow); }
 
-    /* Benchmarks */
-    .benchmarks {
-      margin: 40px 0;
+    /* Tables */
+    .data-table {
+      margin: 16px 0;
     }
 
-    .benchmarks h3 {
-      font-family: 'Permanent Marker', cursive;
-      color: var(--orange);
-      font-size: 1.2rem;
-      margin-bottom: 16px;
-    }
-
-    .benchmarks table {
+    .data-table table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
     }
 
-    .benchmarks th {
+    .data-table th {
       text-align: left;
       padding: 10px 12px;
       border-bottom: 2px solid var(--border);
@@ -245,21 +306,106 @@
       font-weight: 600;
     }
 
-    .benchmarks td {
+    .data-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
     }
 
-    .benchmarks tr:last-child td { border-bottom: none; }
+    .data-table tr:last-child td { border-bottom: none; }
 
-    .benchmarks .highlight {
+    .data-table .best {
       color: var(--yellow);
       font-weight: 700;
     }
 
-    .benchmarks .best {
+    .data-table .highlight-row {
       color: var(--yellow);
       font-weight: 700;
+    }
+
+    .data-table code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--yellow);
+    }
+
+    .data-table .default {
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    .data-table .desc {
+      color: var(--muted);
+    }
+
+    /* Spark notes / tips */
+    .tip-list {
+      margin: 16px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tip-list li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 12px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tip-list li strong {
+      color: var(--text);
+    }
+
+    .tip-list li .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 8px;
+      font-weight: 700;
+    }
+
+    .tag-warn { background: rgba(246, 166, 35, 0.15); color: var(--orange); }
+    .tag-info { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+    .tag-good { background: rgba(46, 160, 67, 0.15); color: var(--green); }
+
+    /* API reference */
+    .endpoint {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+
+    .endpoint-method {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .method-post { background: rgba(46, 160, 67, 0.15); color: var(--green); }
+    .method-get { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+
+    .endpoint-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .endpoint p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 8px;
     }
 
     /* CTA */
@@ -312,6 +458,9 @@
 
   <div class="container">
 
+    <!-- ============================================================ -->
+    <!-- HERO + VIDEO -->
+    <!-- ============================================================ -->
     <section class="hero">
       <h1>El Barto Serve</h1>
       <p class="tagline">OpenAI-compatible API server for diffusion code models. Code doesn't get written left to right &mdash; it gets spray-painted all at once.</p>
@@ -341,19 +490,22 @@
 
     <section class="quote">
       <blockquote>"I didn't write it. Nobody saw me write it. You can't prove anything."</blockquote>
-      <cite>— Bart Simpson, on how diffusion models generate code</cite>
+      <cite>&mdash; Bart Simpson, on how diffusion models generate code</cite>
     </section>
 
+    <!-- ============================================================ -->
+    <!-- OVERVIEW CARDS -->
+    <!-- ============================================================ -->
     <section class="cards">
       <div class="card">
         <h3>What Is This?</h3>
-        <p>Stable-DiffCoder uses <strong>mask diffusion</strong> to generate code &mdash; iteratively denoising all tokens at once instead of predicting left to right. El Barto wraps it in a standard <code>/v1/chat/completions</code> endpoint.</p>
+        <p><a href="https://huggingface.co/ByteDance-Seed/Stable-DiffCoder-8B-Instruct" style="color:var(--blue);">Stable-DiffCoder</a> is ByteDance's mask-diffusion code LLM that spray-paints code through iterative denoising instead of boring left-to-right token generation. El Barto wraps it in a standard <code>/v1/chat/completions</code> endpoint.</p>
       </div>
       <div class="card">
         <h3>Works With</h3>
         <ul>
-          <li>Continue.dev in VS Code</li>
-          <li>Open WebUI</li>
+          <li><a href="https://continue.dev" style="color:var(--blue);">Continue.dev</a> in VS Code</li>
+          <li><a href="https://github.com/open-webui/open-webui" style="color:var(--blue);">Open WebUI</a></li>
           <li>curl &amp; Python scripts</li>
           <li>Any OpenAI-compatible client</li>
         </ul>
@@ -368,8 +520,37 @@
       </div>
     </section>
 
+    <!-- ============================================================ -->
+    <!-- WHY THIS EXISTS -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">Why This Exists</h2>
+
+    <p class="prose">Stable-DiffCoder-8B-Instruct tops the benchmarks for 8B code models &mdash; beating Qwen2.5-Coder, CodeLlama, and every other diffusion LLM. But it uses a <strong>non-standard diffusion inference pipeline</strong> that no existing serving framework supports (not vLLM, not Ollama, not TensorRT-LLM).</p>
+
+    <p class="prose">El Barto wraps the custom diffusion generation in a standard <code>/v1/chat/completions</code> endpoint so you can use it with any OpenAI-compatible client.</p>
+
+    <div class="arch-diagram"><span class="dim">[</span><span class="highlight-text">Your Mac / VS Code</span><span class="dim">]</span>              <span class="dim">[</span><span class="highlight-text">DGX Spark</span><span class="dim">]</span>
+       <span class="dim">|</span>                                <span class="dim">|</span>
+  Continue.dev  <span class="dim">----HTTP:8000----></span>  <span class="highlight-text">El Barto Serve</span>
+  Open WebUI                        <span class="dim">(</span>Stable-DiffCoder<span class="dim">)</span>
+  curl</div>
+
+    <!-- ============================================================ -->
+    <!-- HOW DIFFUSION CODE GENERATION WORKS -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">How Diffusion Code Generation Works</h2>
+
     <section class="diffusion-demo">
-      <h3>How Diffusion Code Generation Works</h3>
+      <p class="prose" style="margin-top:0;">Traditional LLMs generate code left-to-right, one token at a time. Stable-DiffCoder works differently:</p>
+
+      <ol class="prose" style="padding-left: 20px; margin-bottom: 20px;">
+        <li><strong>Mask</strong> &mdash; Start with the full output length filled with <code>[MASK]</code> tokens</li>
+        <li><strong>Denoise</strong> &mdash; Iteratively predict and unmask the most confident tokens</li>
+        <li><strong>Refine</strong> &mdash; Each step reveals more of the code, like graffiti appearing on a wall</li>
+      </ol>
+
+      <p class="prose">This "any-order" generation means the model can consider the full structure simultaneously, making it naturally better at maintaining syntax, matching brackets, and reasoning about code structure.</p>
+
       <div class="step">
         <span class="step-label">Step 0:</span>
         <span><span class="mask">[MASK] [MASK] [MASK] [MASK] [MASK] [MASK]</span> ...</span>
@@ -388,24 +569,180 @@
       </div>
     </section>
 
-    <h3 style="font-family:'Permanent Marker',cursive; color:var(--orange); font-size:1.2rem; margin-bottom:16px;">Quick Start</h3>
-    <div class="code-block"><code><span class="comment"># Clone and run</span>
-<span class="cmd">git clone https://github.com/NathanMaine/el-barto-serve.git</span>
+    <!-- ============================================================ -->
+    <!-- QUICK START -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">Quick Start</h2>
+
+    <p class="code-label">Option A: Native Install (DGX Spark)</p>
+    <div class="code-block"><code><span class="cmd">git clone https://github.com/NathanMaine/el-barto-serve.git</span>
 <span class="cmd">cd el-barto-serve</span>
 
-<span class="comment"># Option A: DGX Spark</span>
-<span class="cmd">./setup-spark.sh && source .venv/bin/activate && python server.py</span>
+<span class="comment"># Automated setup (creates venv, installs CUDA 13.0 PyTorch, deps)</span>
+<span class="cmd">./setup-spark.sh</span>
 
-<span class="comment"># Option B: Any CUDA GPU</span>
+<span class="comment"># Activate and run</span>
+<span class="cmd">source .venv/bin/activate</span>
+<span class="cmd">python server.py</span></code></div>
+
+    <p class="code-label">Option B: Docker (NGC Container)</p>
+    <div class="code-block"><code><span class="cmd">docker build -t el-barto-serve .</span>
+<span class="cmd">docker run -it --gpus all \</span>
+<span class="cmd">  -p 8000:8000 \</span>
+<span class="cmd">  -e ELBARTO_MODEL_PATH=/models/Stable-DiffCoder-8B-Instruct \</span>
+<span class="cmd">  -v /path/to/your/model:/models/Stable-DiffCoder-8B-Instruct \</span>
+<span class="cmd">  el-barto-serve</span></code></div>
+
+    <p class="code-label">Option C: Other CUDA GPUs</p>
+    <div class="code-block"><code><span class="cmd">git clone https://github.com/NathanMaine/el-barto-serve.git</span>
+<span class="cmd">cd el-barto-serve</span>
 <span class="cmd">python -m venv .venv && source .venv/bin/activate</span>
-<span class="cmd">pip install torch && pip install -r requirements.txt</span>
-<span class="cmd">python server.py</span>
+<span class="cmd">pip install torch</span>  <span class="comment"># Standard PyTorch for your GPU</span>
+<span class="cmd">pip install -r requirements.txt</span>
+<span class="cmd">python server.py</span></code></div>
 
-<span class="comment"># Option C: Docker</span>
-<span class="cmd">docker build -t el-barto-serve . && docker run -it --gpus all -p 8000:8000 el-barto-serve</span></code></div>
+    <!-- ============================================================ -->
+    <!-- USAGE -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">Usage</h2>
 
-    <section class="benchmarks">
-      <h3>Benchmarks (8B Models)</h3>
+    <p class="code-label">Test with curl</p>
+    <div class="code-block"><code><span class="cmd">curl http://localhost:8000/v1/chat/completions \</span>
+<span class="cmd">  -H <span class="string">"Content-Type: application/json"</span> \</span>
+<span class="cmd">  -d <span class="string">'{
+    "model": "stable-diffcoder",
+    "messages": [{"role": "user", "content": "Write a binary search in Python"}],
+    "temperature": 0.0
+  }'</span></span></code></div>
+
+    <p class="code-label">Connect from VS Code (Continue.dev)</p>
+    <p class="prose">1. Install the <a href="https://marketplace.visualstudio.com/items?itemName=Continue.continue">Continue extension</a><br>
+    2. Open Continue settings (<code>~/.continue/config.json</code>)<br>
+    3. Add El Barto as a model:</p>
+    <div class="code-block"><code>{
+  <span class="key">"models"</span>: [
+    {
+      <span class="key">"title"</span>: <span class="string">"El Barto (Stable-DiffCoder)"</span>,
+      <span class="key">"provider"</span>: <span class="string">"openai"</span>,
+      <span class="key">"model"</span>: <span class="string">"stable-diffcoder"</span>,
+      <span class="key">"apiBase"</span>: <span class="string">"http://YOUR_SPARK_IP:8000/v1"</span>,
+      <span class="key">"apiKey"</span>: <span class="string">"not-needed"</span>
+    }
+  ]
+}</code></div>
+
+    <!-- ============================================================ -->
+    <!-- CONFIGURATION -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">Configuration</h2>
+
+    <p class="prose">All settings via environment variables (or <code>.env</code> file &mdash; copy from <code>.env.example</code>):</p>
+
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ELBARTO_MODEL_PATH</code></td>
+            <td class="default">ByteDance-Seed/Stable-DiffCoder-8B-Instruct</td>
+            <td class="desc">Local path or HuggingFace model ID</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_HOST</code></td>
+            <td class="default">0.0.0.0</td>
+            <td class="desc">Bind address</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_PORT</code></td>
+            <td class="default">8000</td>
+            <td class="desc">Server port</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_STEPS</code></td>
+            <td class="default">256</td>
+            <td class="desc">Diffusion denoising steps (more = higher quality, slower)</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_GEN_LENGTH</code></td>
+            <td class="default">512</td>
+            <td class="desc">Max output tokens</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_BLOCK_LENGTH</code></td>
+            <td class="default">4</td>
+            <td class="desc">Block diffusion granularity</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_THRESHOLD</code></td>
+            <td class="default">None</td>
+            <td class="desc">Early stopping confidence (0.0&ndash;1.0); lower = faster</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_REMASKING</code></td>
+            <td class="default">low_confidence</td>
+            <td class="desc">Remasking strategy (<code>low_confidence</code> or <code>random</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-header">Tuning for Speed vs Quality</h2>
+
+    <div class="code-block"><code><span class="comment"># Maximum quality (slow — 512 steps, no early stopping)</span>
+<span class="cmd">ELBARTO_STEPS=512 ELBARTO_THRESHOLD= python server.py</span>
+
+<span class="comment"># Balanced (default)</span>
+<span class="cmd">ELBARTO_STEPS=256 python server.py</span>
+
+<span class="comment"># Fast mode (fewer steps + early stopping)</span>
+<span class="cmd">ELBARTO_STEPS=128 ELBARTO_THRESHOLD=0.5 python server.py</span>
+
+<span class="comment"># Fastest (aggressive early stopping — "eat my shorts" mode)</span>
+<span class="cmd">ELBARTO_STEPS=64 ELBARTO_THRESHOLD=0.3 python server.py</span></code></div>
+
+    <!-- ============================================================ -->
+    <!-- API REFERENCE -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">API Reference</h2>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/v1/chat/completions</span>
+      <p>Standard OpenAI chat completions format. Supports both streaming and non-streaming.</p>
+      <p>Extra diffusion-specific fields you can pass via the request body:</p>
+      <div class="code-block" style="margin-bottom:0;"><code>{
+  <span class="key">"steps"</span>: <span class="val">256</span>,
+  <span class="key">"gen_length"</span>: <span class="val">512</span>,
+  <span class="key">"block_length"</span>: <span class="val">4</span>,
+  <span class="key">"threshold"</span>: <span class="val">null</span>,
+  <span class="key">"remasking"</span>: <span class="string">"low_confidence"</span>
+}</code></div>
+    </div>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/v1/models</span>
+      <p>List available models.</p>
+    </div>
+
+    <div class="endpoint">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/health</span>
+      <p>Health check with model status and device info.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- BENCHMARKS -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">Benchmarks (8B Models)</h2>
+
+    <div class="data-table">
       <table>
         <thead>
           <tr>
@@ -431,7 +768,7 @@
             <td>36.2</td>
             <td>53.3</td>
           </tr>
-          <tr class="highlight">
+          <tr class="highlight-row">
             <td><strong>Stable-DiffCoder-8B-Instruct</strong></td>
             <td>86.6</td>
             <td class="best">85.7</td>
@@ -440,8 +777,45 @@
           </tr>
         </tbody>
       </table>
-    </section>
+    </div>
 
+    <!-- ============================================================ -->
+    <!-- DGX SPARK NOTES -->
+    <!-- ============================================================ -->
+    <h2 class="section-header">DGX Spark Notes</h2>
+
+    <p class="prose">Things we learned so the Spark doesn't have a cow:</p>
+
+    <ul class="tip-list">
+      <li>
+        <span class="tag tag-good">AUTO-FIXED</span>
+        <strong>Flash Attention is broken on SM 12.1</strong> &mdash; El Barto auto-patches to use PyTorch's native SDPA, which is actually ~2% faster on Blackwell with cuDNN 9.13+. No action needed.
+      </li>
+      <li>
+        <span class="tag tag-warn">REQUIRED</span>
+        <strong>CUDA 13.0 required</strong> &mdash; The setup script handles this. Don't use standard PyTorch pip wheels.
+      </li>
+      <li>
+        <span class="tag tag-info">TIP</span>
+        <strong>Python 3.12.x recommended</strong> &mdash; 3.13.x has known issues on Spark.
+      </li>
+      <li>
+        <span class="tag tag-good">BENEFIT</span>
+        <strong>Unified memory is your friend</strong> &mdash; The 15GB model leaves ~113GB free. No CPU-to-GPU transfer overhead.
+      </li>
+      <li>
+        <span class="tag tag-good">BENEFIT</span>
+        <strong>Static memory footprint</strong> &mdash; Unlike autoregressive models with growing KV caches, diffusion operates on fixed-size tensors. No OOM surprises mid-generation.
+      </li>
+      <li>
+        <span class="tag tag-warn">WORKAROUND</span>
+        <strong>Performance bug</strong> &mdash; If throughput suddenly drops 50% with GPU stuck at ~14W, do a full AC power cycle (unplug from wall for 60 seconds). This is a known firmware issue.
+      </li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <!-- CTA + FOOTER -->
+    <!-- ============================================================ -->
     <section class="cta">
       <a href="https://github.com/NathanMaine/el-barto-serve">View on GitHub</a>
     </section>
