@@ -1,0 +1,8 @@
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+transformers==4.46.2
+pydantic>=2.0
+# PyTorch must be installed separately for your platform:
+#   DGX Spark (CUDA 13.0): pip install torch --index-url https://download.pytorch.org/whl/cu130
+#   Other NVIDIA GPU:       pip install torch
+#   CPU only:               pip install torch --index-url https://download.pytorch.org/whl/cpu
