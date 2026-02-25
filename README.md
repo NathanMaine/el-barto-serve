@@ -4,7 +4,7 @@
      Upload demo.mp4 via GitHub's web editor (drag-and-drop), then paste the
      generated https://github.com/user-attachments/assets/... URL here. -->
 
-https://github.com/user-attachments/assets/REPLACE-WITH-YOUR-VIDEO-ID
+[https://github.com/user-attachments/assets/REPLACE-WITH-YOUR-VIDEO-ID](https://github.com/user-attachments/assets/23b79c9c-0553-4edf-af00-711f260fe01a)
 
 > *"I didn't write it. Nobody saw me write it. You can't prove anything."*
 >
