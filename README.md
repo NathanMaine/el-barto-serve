@@ -1,8 +1,16 @@
 # El Barto Serve
 
-> *"I didn't do it. Nobody saw me do it. You can't prove anything."*
+<!-- 🎬 Replace the URL below with your GitHub video attachment URL.
+     Upload demo.mp4 via GitHub's web editor (drag-and-drop), then paste the
+     generated https://github.com/user-attachments/assets/... URL here. -->
+
+https://github.com/user-attachments/assets/REPLACE-WITH-YOUR-VIDEO-ID
+
+> *"I didn't write it. Nobody saw me write it. You can't prove anything."*
 >
 > — Bart Simpson, on how diffusion models generate code
+
+**[Watch with captions on the landing page](https://nathanmaine.github.io/el-barto-serve)**
 
 OpenAI-compatible API server for [Stable-DiffCoder](https://huggingface.co/ByteDance-Seed/Stable-DiffCoder-8B-Instruct) — ByteDance's mask-diffusion code LLM that spray-paints code through iterative denoising instead of boring left-to-right token generation.
 

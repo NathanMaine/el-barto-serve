@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:03,500
+"I didn't write it.
+Nobody saw me write it.
+
+2
+00:00:03,500 --> 00:00:05,500
+You can't prove anything."
+
+3
+00:00:06,000 --> 00:00:09,000
+Meet el-barto-serve —
+
+4
+00:00:09,000 --> 00:00:13,000
+the first OpenAI-compatible server
+for diffusion code models.
+
+5
+00:00:13,500 --> 00:00:17,000
+Stable-DiffCoder doesn't generate
+code token by token.
+
+6
+00:00:17,000 --> 00:00:21,500
+It denoises entire blocks simultaneously,
+like graffiti appearing on a wall.
+
+7
+00:00:22,000 --> 00:00:25,000
+Open source. Built for DGX Spark.
+
+8
+00:00:25,000 --> 00:00:27,500
+Eat my tokens.
+
+9
+00:00:28,000 --> 00:00:32,000
+github.com/NathanMaine/el-barto-serve

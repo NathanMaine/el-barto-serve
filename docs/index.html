@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Barto Serve — Diffusion Code Generation</title>
+  <meta name="description" content="OpenAI-compatible API server for Stable-DiffCoder diffusion code models. Built for DGX Spark, runs on any CUDA GPU.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --yellow: #FFD90F;
+      --orange: #F6A623;
+      --red: #E74C3C;
+      --dark: #0D1117;
+      --darker: #010409;
+      --surface: #161B22;
+      --border: #30363D;
+      --text: #E6EDF3;
+      --muted: #8B949E;
+    }
+
+    body {
+      background: var(--darker);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Spraypaint spatter background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 217, 15, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(246, 166, 35, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(231, 76, 60, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 60px 0 40px;
+    }
+
+    .hero h1 {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      color: var(--yellow);
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+      margin-bottom: 8px;
+    }
+
+    .hero .tagline {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Video section */
+    .video-section {
+      margin: 40px 0;
+    }
+
+    .video-wrapper {
+      position: relative;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255, 217, 15, 0.08);
+    }
+
+    .video-wrapper video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Captions styling via ::cue */
+    video::cue {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 3rem;
+      line-height: 1.4;
+    }
+
+    /* Quote */
+    .quote {
+      text-align: center;
+      margin: 40px 0;
+      padding: 24px;
+    }
+
+    .quote blockquote {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      color: var(--yellow);
+      opacity: 0.9;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 8px;
+      font-style: normal;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Info cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .card h3 {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--orange);
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card li {
+      padding: 4px 0;
+    }
+
+    .card li::before {
+      content: '>';
+      color: var(--yellow);
+      font-family: 'JetBrains Mono', monospace;
+      margin-right: 8px;
+    }
+
+    /* Code block */
+    .code-block {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 24px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .code-block .comment { color: var(--muted); }
+    .code-block .cmd { color: var(--yellow); }
+
+    /* Diffusion visualization */
+    .diffusion-demo {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 40px 0;
+    }
+
+    .diffusion-demo h3 {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--orange);
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+
+    .step {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      padding: 6px 0;
+      display: flex;
+      gap: 12px;
+    }
+
+    .step-label {
+      color: var(--muted);
+      min-width: 80px;
+    }
+
+    .step .mask { color: var(--red); opacity: 0.5; }
+    .step .revealed { color: var(--yellow); }
+
+    /* Benchmarks */
+    .benchmarks {
+      margin: 40px 0;
+    }
+
+    .benchmarks h3 {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--orange);
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+
+    .benchmarks table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .benchmarks th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .benchmarks td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .benchmarks tr:last-child td { border-bottom: none; }
+
+    .benchmarks .highlight {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    .benchmarks .best {
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      margin: 60px 0 40px;
+    }
+
+    .cta a {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--darker);
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.3rem;
+      padding: 14px 40px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255, 217, 15, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--yellow);
+      text-decoration: none;
+    }
+
+    footer .graffiti {
+      font-family: 'Permanent Marker', cursive;
+      color: var(--yellow);
+      opacity: 0.4;
+      font-size: 1rem;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <section class="hero">
+      <h1>El Barto Serve</h1>
+      <p class="tagline">OpenAI-compatible API server for diffusion code models. Code doesn't get written left to right &mdash; it gets spray-painted all at once.</p>
+    </section>
+
+    <section class="video-section">
+      <div class="video-wrapper">
+        <video
+          controls
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="demo.mp4" type="video/mp4">
+          <track
+            kind="captions"
+            src="post-captions.vtt"
+            srclang="en"
+            label="English"
+            default
+          >
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+
+    <section class="quote">
+      <blockquote>"I didn't write it. Nobody saw me write it. You can't prove anything."</blockquote>
+      <cite>— Bart Simpson, on how diffusion models generate code</cite>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <h3>What Is This?</h3>
+        <p>Stable-DiffCoder uses <strong>mask diffusion</strong> to generate code &mdash; iteratively denoising all tokens at once instead of predicting left to right. El Barto wraps it in a standard <code>/v1/chat/completions</code> endpoint.</p>
+      </div>
+      <div class="card">
+        <h3>Works With</h3>
+        <ul>
+          <li>Continue.dev in VS Code</li>
+          <li>Open WebUI</li>
+          <li>curl &amp; Python scripts</li>
+          <li>Any OpenAI-compatible client</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Runs On</h3>
+        <ul>
+          <li>NVIDIA DGX Spark (optimized)</li>
+          <li>Any CUDA GPU</li>
+          <li>Docker with --gpus all</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="diffusion-demo">
+      <h3>How Diffusion Code Generation Works</h3>
+      <div class="step">
+        <span class="step-label">Step 0:</span>
+        <span><span class="mask">[MASK] [MASK] [MASK] [MASK] [MASK] [MASK]</span> ...</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 32:</span>
+        <span><span class="revealed">def</span> <span class="mask">[MASK]</span> <span class="revealed">sort</span> <span class="mask">[MASK] [MASK]</span> <span class="revealed">:</span> ...</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 64:</span>
+        <span><span class="revealed">def quick sort ( arr :</span> ...</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 128:</span>
+        <span><span class="revealed">def quick sort ( arr : list ) -> list :</span> ...</span>
+      </div>
+    </section>
+
+    <h3 style="font-family:'Permanent Marker',cursive; color:var(--orange); font-size:1.2rem; margin-bottom:16px;">Quick Start</h3>
+    <div class="code-block"><code><span class="comment"># Clone and run</span>
+<span class="cmd">git clone https://github.com/NathanMaine/el-barto-serve.git</span>
+<span class="cmd">cd el-barto-serve</span>
+
+<span class="comment"># Option A: DGX Spark</span>
+<span class="cmd">./setup-spark.sh && source .venv/bin/activate && python server.py</span>
+
+<span class="comment"># Option B: Any CUDA GPU</span>
+<span class="cmd">python -m venv .venv && source .venv/bin/activate</span>
+<span class="cmd">pip install torch && pip install -r requirements.txt</span>
+<span class="cmd">python server.py</span>
+
+<span class="comment"># Option C: Docker</span>
+<span class="cmd">docker build -t el-barto-serve . && docker run -it --gpus all -p 8000:8000 el-barto-serve</span></code></div>
+
+    <section class="benchmarks">
+      <h3>Benchmarks (8B Models)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>HumanEval</th>
+            <th>MBPP</th>
+            <th>MHPP</th>
+            <th>BigCodeBench</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Qwen2.5-Coder-7B-Instruct</td>
+            <td class="best">88.4</td>
+            <td>83.5</td>
+            <td>26.7</td>
+            <td>48.8</td>
+          </tr>
+          <tr>
+            <td>Seed-Coder-8B-Instruct</td>
+            <td>84.8</td>
+            <td>85.2</td>
+            <td>36.2</td>
+            <td>53.3</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Stable-DiffCoder-8B-Instruct</strong></td>
+            <td>86.6</td>
+            <td class="best">85.7</td>
+            <td class="best">42.4</td>
+            <td class="best">54.8</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="cta">
+      <a href="https://github.com/NathanMaine/el-barto-serve">View on GitHub</a>
+    </section>
+
+    <footer>
+      <p>MIT License &middot; <a href="https://github.com/NathanMaine">Nathan Maine</a> &middot; <a href="https://huggingface.co/ByteDance-Seed/Stable-DiffCoder-8B-Instruct">Stable-DiffCoder on HuggingFace</a></p>
+      <p class="graffiti">El Barto was here.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
