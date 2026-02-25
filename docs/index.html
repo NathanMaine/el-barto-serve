@@ -452,6 +452,29 @@
       font-size: 1rem;
       margin-top: 12px;
     }
+
+    /* Top GitHub button */
+    .top-cta {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .top-cta a {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--darker);
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.1rem;
+      padding: 10px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .top-cta a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(255, 217, 15, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -464,6 +487,9 @@
     <section class="hero">
       <h1>El Barto Serve</h1>
       <p class="tagline">OpenAI-compatible API server for diffusion code models. Code doesn't get written left to right &mdash; it gets spray-painted all at once.</p>
+      <div class="top-cta">
+        <a href="https://github.com/NathanMaine/el-barto-serve">View on GitHub</a>
+      </div>
     </section>
 
     <section class="video-section">
