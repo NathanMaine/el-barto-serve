@@ -13,8 +13,13 @@ import os
 import time
 import uuid
 import logging
+import warnings
 from contextlib import asynccontextmanager
 from typing import Optional
+
+# Suppress harmless PyTorch warning about GB10 (SM 12.1) exceeding the officially
+# supported CUDA capability range. Everything works correctly with CUDA 13.0 wheels.
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.cuda")
 
 # Patch flash-attn -> SDPA before any transformers imports (required for DGX Spark SM 12.1)
 import patches.sdpa_patch  # noqa: F401

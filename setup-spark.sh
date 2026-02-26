@@ -75,13 +75,15 @@ pip install -r "${SCRIPT_DIR}/requirements.txt"
 echo
 echo "Verifying PyTorch + CUDA ..."
 python3 -c "
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='torch.cuda')
 import torch
 print(f'PyTorch version: {torch.__version__}')
 print(f'CUDA available:  {torch.cuda.is_available()}')
 if torch.cuda.is_available():
     print(f'CUDA version:    {torch.version.cuda}')
     print(f'Device:          {torch.cuda.get_device_name(0)}')
-    mem_gb = torch.cuda.get_device_properties(0).total_mem / 1e9
+    mem_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
     print(f'Memory:          {mem_gb:.1f} GB')
 "
 

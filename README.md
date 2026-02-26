@@ -148,6 +148,7 @@ ELBARTO_STEPS=64 ELBARTO_THRESHOLD=0.3 python server.py
 Things we learned so the Spark doesn't have a cow:
 
 - **Flash Attention is broken on SM 12.1** — El Barto auto-patches to use PyTorch's native SDPA, which is actually ~2% faster on Blackwell with cuDNN 9.13+. No action needed.
+- **PyTorch CUDA capability warning** — PyTorch may warn that the GB10 (SM 12.1) exceeds its officially supported range (8.0–12.0). This is harmless — the CUDA 13.0 wheels work correctly. The server suppresses this warning automatically.
 - **CUDA 13.0 required** — The setup script handles this. Don't use standard PyTorch pip wheels.
 - **Python 3.12.x recommended** — 3.13.x has known issues on Spark.
 - **Unified memory is your friend** — The 15GB model leaves ~113GB free. No CPU-to-GPU transfer overhead.
