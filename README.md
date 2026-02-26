@@ -93,24 +93,24 @@ curl http://localhost:8000/v1/chat/completions \
 ### Connect from VS Code (Continue.dev)
 
 1. Install the [Continue extension](https://marketplace.visualstudio.com/items?itemName=Continue.continue)
-2. Open Continue settings (`~/.continue/config.json`)
+2. Edit `~/.continue/config.yaml`
 3. Add El Barto as a model:
 
-```json
-{
-  "models": [
-    {
-      "title": "El Barto (Stable-DiffCoder)",
-      "provider": "openai",
-      "model": "stable-diffcoder",
-      "apiBase": "http://YOUR_SPARK_IP:8000/v1",
-      "apiKey": "not-needed"
-    }
-  ]
-}
+```yaml
+models:
+  - name: El Barto (Stable-DiffCoder)
+    provider: openai
+    model: stable-diffcoder
+    apiBase: http://YOUR_SPARK_IP:8000/v1
+    apiKey: not-needed
+    requestOptions:
+      extraBodyProperties:
+        max_tokens: 384
 ```
 
-See [examples/continue-config.json](examples/continue-config.json) for the full config.
+> **Tip:** Cap `max_tokens` at ~384. Diffusion models fill their entire token budget — without a cap, you'll get gibberish noise after the actual code ends.
+
+See [examples/continue-config.yaml](examples/continue-config.yaml) for the full config.
 
 ## Configuration
 
@@ -119,8 +119,10 @@ All settings via environment variables (or `.env` file — copy from `.env.examp
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `ELBARTO_MODEL_PATH` | `ByteDance-Seed/Stable-DiffCoder-8B-Instruct` | Local path or HuggingFace model ID |
+| `ELBARTO_MODEL_REVISION` | `None` | Pin to a specific model revision (commit hash) for reproducibility |
 | `ELBARTO_HOST` | `0.0.0.0` | Bind address |
 | `ELBARTO_PORT` | `8000` | Server port |
+| `ELBARTO_API_KEY` | *(empty)* | API key for auth; clients send as `Authorization: Bearer <key>` |
 | `ELBARTO_STEPS` | `256` | Diffusion denoising steps (more = higher quality, slower) |
 | `ELBARTO_GEN_LENGTH` | `512` | Max output tokens |
 | `ELBARTO_BLOCK_LENGTH` | `4` | Block diffusion granularity |
@@ -143,7 +145,41 @@ ELBARTO_STEPS=128 ELBARTO_THRESHOLD=0.5 python server.py
 ELBARTO_STEPS=64 ELBARTO_THRESHOLD=0.3 python server.py
 ```
 
+## Running in Production
+
+### Background Mode
+
+```bash
+nohup python server.py > /tmp/elbarto.log 2>&1 &
+tail -f /tmp/elbarto.log  # Watch logs
+```
+
+### Download Model Locally
+
+The default `ELBARTO_MODEL_PATH` auto-downloads from HuggingFace on first run. To pre-download or use a local copy:
+
+```bash
+# Option A: Pre-download from HuggingFace
+pip install huggingface-hub
+huggingface-cli download ByteDance-Seed/Stable-DiffCoder-8B-Instruct \
+  --local-dir ~/models/Stable-DiffCoder-8B-Instruct
+
+# Option B: Copy from network/NAS storage
+rsync -ah --progress /path/to/Stable-DiffCoder-8B-Instruct/ \
+  ~/models/Stable-DiffCoder-8B-Instruct/
+```
+
+Then set the path in `.env`:
+
+```bash
+ELBARTO_MODEL_PATH=/home/YOUR_USER/models/Stable-DiffCoder-8B-Instruct
+```
+
+**Tip:** On DGX Spark, always copy models to local NVMe. NFS is ~120 MB/s for sequential reads but much slower for the random access patterns during inference.
+
 ## DGX Spark Notes
+
+> For a full step-by-step setup guide (SSH, NAS mounts, LM Studio, Continue.dev), see [docs/dgx-spark-setup-guide.md](docs/dgx-spark-setup-guide.md).
 
 Things we learned so the Spark doesn't have a cow:
 

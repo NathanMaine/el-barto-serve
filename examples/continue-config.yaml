@@ -1,0 +1,14 @@
+# Continue.dev configuration for El Barto Serve
+# Copy to ~/.continue/config.yaml
+name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - name: El Barto (Stable-DiffCoder)
+    provider: openai
+    model: stable-diffcoder
+    apiBase: http://YOUR_SPARK_IP:8000/v1
+    apiKey: not-needed
+    requestOptions:
+      extraBodyProperties:
+        max_tokens: 384
