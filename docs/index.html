@@ -643,19 +643,18 @@
 
     <p class="code-label">Connect from VS Code (Continue.dev)</p>
     <p class="prose">1. Install the <a href="https://marketplace.visualstudio.com/items?itemName=Continue.continue">Continue extension</a><br>
-    2. Open Continue settings (<code>~/.continue/config.json</code>)<br>
+    2. Edit <code>~/.continue/config.yaml</code><br>
     3. Add El Barto as a model:</p>
-    <div class="code-block"><code>{
-  <span class="key">"models"</span>: [
-    {
-      <span class="key">"title"</span>: <span class="string">"El Barto (Stable-DiffCoder)"</span>,
-      <span class="key">"provider"</span>: <span class="string">"openai"</span>,
-      <span class="key">"model"</span>: <span class="string">"stable-diffcoder"</span>,
-      <span class="key">"apiBase"</span>: <span class="string">"http://YOUR_SPARK_IP:8000/v1"</span>,
-      <span class="key">"apiKey"</span>: <span class="string">"not-needed"</span>
-    }
-  ]
-}</code></div>
+    <div class="code-block"><code><span class="key">models</span>:
+  - <span class="key">name</span>: <span class="string">El Barto (Stable-DiffCoder)</span>
+    <span class="key">provider</span>: <span class="string">openai</span>
+    <span class="key">model</span>: <span class="string">stable-diffcoder</span>
+    <span class="key">apiBase</span>: <span class="string">http://YOUR_SPARK_IP:8000/v1</span>
+    <span class="key">apiKey</span>: <span class="string">not-needed</span>
+    <span class="key">requestOptions</span>:
+      <span class="key">extraBodyProperties</span>:
+        <span class="key">max_tokens</span>: <span class="val">384</span></code></div>
+    <p class="prose"><strong>Tip:</strong> Cap <code>max_tokens</code> at ~384. Diffusion models fill their entire token budget &mdash; without a cap, you'll get gibberish noise after the actual code ends.</p>
 
     <!-- ============================================================ -->
     <!-- CONFIGURATION -->
@@ -680,6 +679,11 @@
             <td class="desc">Local path or HuggingFace model ID</td>
           </tr>
           <tr>
+            <td><code>ELBARTO_MODEL_REVISION</code></td>
+            <td class="default">None</td>
+            <td class="desc">Pin to a specific model revision (commit hash) for reproducibility</td>
+          </tr>
+          <tr>
             <td><code>ELBARTO_HOST</code></td>
             <td class="default">0.0.0.0</td>
             <td class="desc">Bind address</td>
@@ -688,6 +692,11 @@
             <td><code>ELBARTO_PORT</code></td>
             <td class="default">8000</td>
             <td class="desc">Server port</td>
+          </tr>
+          <tr>
+            <td><code>ELBARTO_API_KEY</code></td>
+            <td class="default"><em>(empty)</em></td>
+            <td class="desc">API key for auth; clients send as <code>Authorization: Bearer &lt;key&gt;</code></td>
           </tr>
           <tr>
             <td><code>ELBARTO_STEPS</code></td>
@@ -810,12 +819,16 @@
     <!-- ============================================================ -->
     <h2 class="section-header">DGX Spark Notes</h2>
 
-    <p class="prose">Things we learned so the Spark doesn't have a cow:</p>
+    <p class="prose">Things we learned so the Spark doesn't have a cow. For a full step-by-step setup guide (SSH, NAS mounts, LM Studio, Continue.dev), see <a href="https://github.com/NathanMaine/el-barto-serve/blob/main/docs/dgx-spark-setup-guide.md">the DGX Spark setup guide</a>.</p>
 
     <ul class="tip-list">
       <li>
         <span class="tag tag-good">AUTO-FIXED</span>
         <strong>Flash Attention is broken on SM 12.1</strong> &mdash; El Barto auto-patches to use PyTorch's native SDPA, which is actually ~2% faster on Blackwell with cuDNN 9.13+. No action needed.
+      </li>
+      <li>
+        <span class="tag tag-good">AUTO-FIXED</span>
+        <strong>PyTorch CUDA capability warning</strong> &mdash; PyTorch may warn that the GB10 (SM 12.1) exceeds its officially supported range (8.0&ndash;12.0). This is harmless &mdash; the CUDA 13.0 wheels work correctly. The server suppresses this warning automatically.
       </li>
       <li>
         <span class="tag tag-warn">REQUIRED</span>
